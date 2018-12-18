@@ -1,0 +1,3 @@
+#!/usr/bin/with-contenv bash
+echo "Starting garbage collector"
+exec /docker-tc/bin/gc.sh

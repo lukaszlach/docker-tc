@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+. /docker-tc/bin/core.sh
+rm -rf "$CONTAINER_LOCKS_DIR"
+mkdir -p "$DATA_DIR" "$CONTAINER_LOCKS_DIR"
+exit 0

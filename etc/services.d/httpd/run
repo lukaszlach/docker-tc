@@ -1,0 +1,4 @@
+#!/usr/bin/with-contenv bash
+echo "Starting HTTP server on $HTTP_BIND:$HTTP_PORT"
+set -x
+exec hapttic -file "/docker-tc/bin/httpd.sh" -logErrors -host "$HTTP_BIND" -port "$HTTP_PORT"
