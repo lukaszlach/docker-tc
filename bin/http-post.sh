@@ -30,7 +30,7 @@ while read QUERY_PARAM; do
             ;;
     esac
     OPTIONS_LOG+="$FIELD=$VALUE, "
-done < <(echo "$QUERY")
+done < <(echo "$QUERY" | tr '&' $'\n')
 if [ -z "$NETM_OPTIONS" ] && [ -z "$TBF_OPTIONS" ]; then
     echo "Notice: Nothing to do"
     exit 0
