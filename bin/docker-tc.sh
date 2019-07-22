@@ -79,5 +79,5 @@ while read DOCKER_EVENT; do
     done < <(echo -e "$NETWORK_NAMES")
 done < <(
     docker ps -q;
-    docker events --filter event=start
+    docker events --filter event=start | head -n1
 )
