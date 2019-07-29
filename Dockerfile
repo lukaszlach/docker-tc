@@ -54,4 +54,5 @@ LABEL maintainer="Łukasz Lach <llach@llach.pl>" \
       com.docker-tc.enabled=0 \
       com.docker-tc.self=1
 
+ARG CACHEBUST=1
 ADD . /docker-tc
