@@ -20,10 +20,26 @@ docker_id_long_to_short() {
 docker_container_get_name() {
     docker inspect --format '{{ .Name }}' "$1"
 }
-docker_network_get_interface() {
+docker_container_get_interfaces() {
+    IFLINKS=$(docker exec -it $1 sh -c 'cat /sys/class/net/*/iflink' | tr -d '\r' | tr '\n' ' ')
+    if [ -z "$IFLINKS" ]; then
+        return 1
+    fi
+    RESULT=""
+    while IFS=" " read -r IFLINK; do
+        if [[ $IFLINK -gt 1 ]]; then
+            IFACE=$(grep -l $IFLINK /sys/class/net/veth*/ifindex | sed -e 's;^.*net/\(.*\)/ifindex$;\1;')
+            if [ -n "$IFACE" ]; then
+                RESULT="$RESULT $IFACE"
+            fi
+        fi
+    done < <(echo -e "$IFLINKS")
+    echo $RESULT
+}
+docker_network_get_interfaces() {
     NETWORK_ID=$(docker network inspect --format '{{ .Id }}' "$1")
     SHORT_NETWORK_ID=$(echo -n "$NETWORK_ID" | head -c 12)
-    NETWORK_INTERFACE_NAME=$(ip a | grep -E "veth.*br-$SHORT_NETWORK_ID" | grep -o 'veth[^@]*' || :)
+    NETWORK_INTERFACE_NAME=$(ip a | grep -E "veth.*br-$SHORT_NETWORK_ID" | grep -o 'veth[^@]*' | tr -d '\r' | tr '\n' ' ' || :)
     if [ -z "$NETWORK_INTERFACE_NAME" ]; then
         return 1
     fi
