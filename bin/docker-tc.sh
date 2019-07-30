@@ -46,9 +46,7 @@ while read DOCKER_EVENT; do
             lock "$CONTAINER_ID"
             continue
         fi
-        log "Ifaces: $NETWORK_INTERFACE_NAMES"
-        while IFS=" " read -r NETWORK_INTERFACE_NAME; do
-            log "Net: $NETWORK_INTERFACE_NAME"
+        while IFS= read -r NETWORK_INTERFACE_NAME; do
             LIMIT=$(docker_container_labels_get "$BASE_LABEL.limit")
             DELAY=$(docker_container_labels_get "$BASE_LABEL.delay")
             LOSS=$(docker_container_labels_get "$BASE_LABEL.loss")

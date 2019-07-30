@@ -8,7 +8,7 @@ fi
 CONTAINER_NETWORKS=$(docker_container_get_networks "$CONTAINER_ID")
 RESULT=
 while read NETWORK_ID; do
-    NETWORK_INTERFACE_NAMES=$(docker_container_interface_in_network "$CONTAINER_ID" "$NETWORK_ID")
+    NETWORK_INTERFACE_NAMES=$(docker_container_interfaces_in_network "$CONTAINER_ID" "$NETWORK_ID")
     if [ -z "$NETWORK_INTERFACE_NAMES" ]; then
         continue
     fi
