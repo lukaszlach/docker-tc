@@ -229,11 +229,15 @@ docker service create \
 
 > `/var/docker-tc` directory has to exist on Docker Swarm nodes before deploying the service
 
+## Contributors
+
+[![](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/images/0)](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/links/0)[![](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/images/1)](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/links/1)[![](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/images/2)](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/links/2)[![](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/images/3)](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/links/3)[![](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/images/4)](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/links/4)[![](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/images/5)](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/links/5)[![](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/images/6)](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/links/6)[![](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/images/7)](https://sourcerer.io/fame/lukaszlach/lukaszlach/docker-tc/links/7)
+
 ## Licence
 
 MIT License
 
-Copyright (c) 2018 Łukasz Lach <llach@llach.pl>
+Copyright (c) 2018-2019 Łukasz Lach <llach@llach.pl>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
