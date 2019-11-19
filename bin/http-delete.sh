@@ -10,11 +10,13 @@ fi
 CONTAINER_ID=$(docker_container_get_short_id "$CONTAINER_ID")
 CONTAINER_NETWORKS=$(docker_container_get_networks "$CONTAINER_ID")
 while read NETWORK_ID; do
-    NETWORK_INTERFACE_NAME=$(docker_network_get_interface "$NETWORK_ID")
-    if [ -z "$NETWORK_INTERFACE_NAME" ]; then
+    NETWORK_INTERFACE_NAMES=$(docker_container_interfaces_in_network "$CONTAINER_ID" "$NETWORK_ID")
+    if [ -z "$NETWORK_INTERFACE_NAMES" ]; then
         continue
     fi
-    qdisc_del "$NETWORK_INTERFACE_NAME"
+    while IFS= read -r NETWORK_INTERFACE_NAME; do
+        qdisc_del "$NETWORK_INTERFACE_NAME"
+    done < <(echo -e "$NETWORK_INTERFACE_NAMES")
 done < <(echo -e "$CONTAINER_NETWORKS")
 block "$CONTAINER_ID"
 http_response 200
