@@ -63,6 +63,12 @@ Docker Traffic Control recognizes the following labels:
 * `com.docker-tc.duplicate` - percentage value of network packets to be duplicated before queueing
 * `com.docker-tc.corrupt` - emulation of random noise introducing an error in a random position for a chosen percent of packets
 
+Docker Traffic Control can also apply rules on a specific network, to do so add the network name as a prefix the of previously
+describe parameters. For example: `com.docker-tc.limit` will become `com.docker-tc.test-net.limit` where `test-net` is one
+of the networks used by the container. Note that this rule doesn't apply on the label `com.docker-tc.enabled`. Also when
+you are using `docker-compose` network name describe and create by the docker-compose will be prefix by the name of the
+project (`--project-name` or working directory if the option is not provide).
+
 > Read the [tc command manual](http://man7.org/linux/man-pages/man8/tc.8.html) to get detailed information about parameter
 > types and possible values.
 
@@ -180,6 +186,7 @@ All previous rules for this container are removed.
 
 ```bash
 curl -d'delay=300ms' localhost:4080/my-container-name
+curl -d'delay=300ms' localhost:4080/my-container-name/my-net
 curl -d'rate=512kbps' localhost:4080/221517ae59d1
 curl -d'rate=1mbps&loss=10%' localhost:4080/my-container-name
 ```
@@ -203,10 +210,12 @@ alias docker-tc='curl -sSf -X "$1" "localhost:4080/$2?$3"'
 
 ```bash
 docker-tc get 221517ae59d1
+docker-tc get 221517ae59d1/my-net
 docker-tc list
 docker-tc delete my-container-name
 docker-tc put 221517ae59d1
 docker-tc set my-container-name 'delay=300ms&rate=1000kbps'
+docker-tc set my-container-name/my-net 'delay=300ms&rate=1000kbps'
 ```
 
 ## Build

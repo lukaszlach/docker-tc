@@ -4,7 +4,8 @@
 . /docker-tc/bin/tc-common.sh
 . /docker-tc/bin/core.sh
 CONTAINER_ID=$(http_safe_param "$1")
-QUERY="$2"
+NETWORK_NAME=$(http_safe_param "$2")
+QUERY="$3"
 if ! docker_container_is_running "$CONTAINER_ID"; then
     http_response 400 "$CONTAINER_ID is not running"
 fi
@@ -42,18 +43,21 @@ while read NETWORK_ID; do
     if [ -z "$NETWORK_INTERFACE_NAMES" ]; then
         continue
     fi
-    while IFS= read -r NETWORK_INTERFACE_NAME; do
-        tc_init
-        qdisc_del "$NETWORK_INTERFACE_NAME"
-        if [ ! -z "$NETM_OPTIONS" ]; then
-            qdisc_netm "$NETWORK_INTERFACE_NAME" $NETM_OPTIONS
-        fi
-        if [ ! -z "$TBF_OPTIONS" ]; then
-            qdisc_tbf "$NETWORK_INTERFACE_NAME" $TBF_OPTIONS
-        fi
-        echo "Set ${OPTIONS_LOG} on $NETWORK_INTERFACE_NAME"
-        echo "Controlling traffic of the container $(docker_container_get_name "$CONTAINER_ID") on $NETWORK_INTERFACE_NAME"
-    done < <(echo -e "$NETWORK_INTERFACE_NAMES")
+    if [ -z "$NETWORK_NAME" ] || [ "$NETWORK_NAME" == "$NETWORK_ID" ]; then
+        echo "[DEBUG] $NETWORK_NAME match $NETWORK_ID"
+        while IFS= read -r NETWORK_INTERFACE_NAME; do
+            tc_init
+            qdisc_del "$NETWORK_INTERFACE_NAME"
+            if [ ! -z "$NETM_OPTIONS" ]; then
+                qdisc_netm "$NETWORK_INTERFACE_NAME" $NETM_OPTIONS
+            fi
+            if [ ! -z "$TBF_OPTIONS" ]; then
+                qdisc_tbf "$NETWORK_INTERFACE_NAME" $TBF_OPTIONS
+            fi
+            echo "Set ${OPTIONS_LOG} on $NETWORK_INTERFACE_NAME"
+            echo "Controlling traffic of the container $(docker_container_get_name "$CONTAINER_ID") on $NETWORK_INTERFACE_NAME"
+        done < <(echo -e "$NETWORK_INTERFACE_NAMES")
+    fi
 done < <(echo -e "$CONTAINER_NETWORKS")
 block "$CONTAINER_ID"
 http_response 200
