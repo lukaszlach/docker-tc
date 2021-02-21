@@ -4,6 +4,7 @@
 . /docker-tc/bin/tc-common.sh
 . /docker-tc/bin/core.sh
 CONTAINER_ID=$(http_safe_param "$1")
+NETWORK_NAME=$(http_safe_param "$2")
 if ! docker_container_is_running "$CONTAINER_ID"; then
     http_response 400 "$CONTAINER_ID is not running"
 fi
@@ -14,9 +15,11 @@ while read NETWORK_ID; do
     if [ -z "$NETWORK_INTERFACE_NAMES" ]; then
         continue
     fi
-    while IFS= read -r NETWORK_INTERFACE_NAME; do
-        qdisc_del "$NETWORK_INTERFACE_NAME"
-    done < <(echo -e "$NETWORK_INTERFACE_NAMES")
+    if [ -z "$NETWORK_NAME" ] || [ "$NETWORK_NAME" == $NETWORK_ID ]; then
+        while IFS= read -r NETWORK_INTERFACE_NAME; do
+            qdisc_del "$NETWORK_INTERFACE_NAME"
+        done < <(echo -e "$NETWORK_INTERFACE_NAMES")
+    fi
 done < <(echo -e "$CONTAINER_NETWORKS")
 block "$CONTAINER_ID"
 http_response 200

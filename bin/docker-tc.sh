@@ -47,12 +47,30 @@ while read DOCKER_EVENT; do
             continue
         fi
         while IFS= read -r NETWORK_INTERFACE_NAME; do
-            LIMIT=$(docker_container_labels_get "$BASE_LABEL.limit")
-            DELAY=$(docker_container_labels_get "$BASE_LABEL.delay")
-            LOSS=$(docker_container_labels_get "$BASE_LABEL.loss")
-            CORRUPT=$(docker_container_labels_get "$BASE_LABEL.corrupt")
-            DUPLICATION=$(docker_container_labels_get "$BASE_LABEL.duplicate")
-            REORDERING=$(docker_container_labels_get "$BASE_LABEL.reorder")
+            LIMIT_NETWORK=$(docker_container_labels_get "$BASE_LABEL.$NETWORK_NAME.limit")
+            LIMIT_GLOBAL=$(docker_container_labels_get "$BASE_LABEL.limit")
+            LIMIT=${LIMIT_NETWORK:-${LIMIT_GLOBAL}}
+            
+            DELAY_NETWORK=$(docker_container_labels_get "$BASE_LABEL.$NETWORK_NAME.delay")
+            DELAY_GLOBAL=$(docker_container_labels_get "$BASE_LABEL.delay")
+            DELAY=${DELAY_NETWORK:-${DELAY_GLOBAL}}
+            
+            LOSS_NETWORK=$(docker_container_labels_get "$BASE_LABEL.$NETWORK_NAME.loss")
+            LOSS_GLOBAL=$(docker_container_labels_get "$BASE_LABEL.loss")
+            LOSS=${LOSS_NETWORK:-${LOSS_GLOBAL}}
+            
+            CORRUPT_NETWORK=$(docker_container_labels_get "$BASE_LABEL.$NETWORK_NAME.corrupt")
+            CORRUPT_GLOBAL=$(docker_container_labels_get "$BASE_LABEL.corrupt")
+            CORRUPT=${CORRUPT_NETWORK:-${CORRUPT_GLOBAL}}
+            
+            DUPLICATION_NETWORK=$(docker_container_labels_get "$BASE_LABEL.$NETWORK_NAME.duplicate")
+            DUPLICATION_GLOBAL=$(docker_container_labels_get "$BASE_LABEL.duplicate")
+            DUPLICATION=${DUPLICATION_NETWORK:-${DUPLICATION_GLOBAL}}
+            
+            REORDERING_NETWORK=$(docker_container_labels_get "$BASE_LABEL.$NETWORK_NAME.reorder")
+            REORDERING_GLOBAL=$(docker_container_labels_get "$BASE_LABEL.reorder")
+            REORDERING=${REORDERING_NETWORK:-${REORDERING_GLOBAL}}
+            
             tc_init
             qdisc_del "$NETWORK_INTERFACE_NAME" &>/dev/null || true
             OPTIONS_LOG=
