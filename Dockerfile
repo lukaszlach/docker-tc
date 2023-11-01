@@ -1,10 +1,10 @@
-FROM golang:stretch AS hapttic
-
+FROM golang:bullseye AS hapttic
+ENV GO111MODULE=auto
 RUN git clone https://github.com/jsoendermann/hapttic.git && \
     cd hapttic/ && \
     go build -o hapttic .
 
-FROM debian:stretch-slim AS docker-tc
+FROM debian:bullseye-slim AS docker-tc
 
 COPY --from=hapttic /go/hapttic/hapttic /usr/bin/hapttic
 RUN hapttic -version && \
@@ -26,14 +26,14 @@ RUN curl -sSfL https://github.com/just-containers/s6-overlay/releases/download/v
     ln -sf /docker-tc/etc/cont-finish.d /etc
 
 ARG DOCKER_VERSION=""
-RUN ( curl -fsSL get.docker.com | VERSION=${DOCKER_VERSION} CHANNEL=edge sh ) && \
+RUN ( curl -fsSL get.docker.com | VERSION=${DOCKER_VERSION} CHANNEL=stable sh ) && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
 ENTRYPOINT ["/init"]
 EXPOSE 80/tcp
 VOLUME ["/var/docker-tc"]
-ARG VERSION=dev
+ARG VERSION=2023-dev
 ARG VCS_REF
 ARG BUILD_DATE
 ENV DOCKER_TC_VERSION="${VERSION:-dev}" \
