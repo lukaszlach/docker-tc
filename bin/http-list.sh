@@ -11,6 +11,7 @@ while IFS=" " read -r CONTAINER_ID CONTAINER_NAME; do
         if [ -z "$NETWORK_INTERFACE_NAMES" ]; then
             continue
         fi
+        append_result "# network=$NETWORK_ID"
         while IFS= read -r NETWORK_INTERFACE_NAME; do
             #append_result $(tc qdisc show dev "$NETWORK_INTERFACE_NAME" 2>&1) "\n"
             RESULT="$RESULT$(tc qdisc show dev "$NETWORK_INTERFACE_NAME" 2>&1)\n"
