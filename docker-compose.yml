@@ -16,6 +16,8 @@ services:
     environment:
       HTTP_BIND: "${HTTP_BIND:-127.0.0.1}"
       HTTP_PORT: "${HTTP_PORT:-4080}"
+      QDISC_TBF_BURST: "${QDISC_TBF_BURST:-5kb}"
+      QDISC_TBF_LATENCY: "${QDISC_TBF_LATENCY:-50ms}"
     network_mode: host
 
 networks:
