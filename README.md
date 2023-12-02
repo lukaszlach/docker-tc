@@ -44,6 +44,7 @@ Docker Traffic Control recognizes the following labels:
     * `bit`, `kbit`, `mbit`, `gbit`, `tbit`
     * `bps`, `kbps`, `mbps`, `gbps`, `tbps`
     * to specify in IEC units, replace the SI prefix (k-, m-, g-, t-) with IEC prefix (ki-, mi-, gi- and ti-) respectively
+    * to configure other [rate specific parameters](https://linux.die.net/man/8/tc-tbf#:~:text=to%201mbit/s.-,Parameters,-See%20tc(8)), setup env variables `QDISC_TBF_BURST` and `QDISC_TBF_LATENCY` before running docker-tc  
 * `com.docker-tc.delay` - length of time packets will be delayed, accepts a floating point number followed by an optional unit:
     * `s`, `sec`, `secs`
     * `ms`, `msec`, `msecs`
